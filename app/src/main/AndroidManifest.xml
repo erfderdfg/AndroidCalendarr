@@ -12,6 +12,9 @@
         android:theme="@style/Theme.AndroidCalendarr"
         tools:targetApi="34">
         <activity
+            android:name=".NewWordActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
