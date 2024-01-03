@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     CalendarView simpleCalendarView;
     private WordViewModel mWordViewModel;
-    private String date;
-
+    private String mDate;
+private Integer mMaxId;
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 
     @Override
@@ -37,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
         mWordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
         mWordViewModel.getAllWords().observe(this, words -> {
             // Update the cached copy of the words in the adapter.
-
+            Log.i("test","total size "+words.size());
+        });
+        mWordViewModel.getMaxId().observe(this, maxId -> {
+            mMaxId = maxId;
+            Log.i("test","Max id changed to "+maxId);
         });
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -47,13 +52,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // display the selected date by using a toast
-                date = dayOfMonth + "/" + (month + 1) + "/" + year;
+                mDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                 Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
                 LiveData<List<Word>> allWords = mWordViewModel.getAllWords();
-                allWords.
-                Log.i("test","");
+                List<Word> lstofWords = allWords.getValue();
+                Log.i("test","size "+lstofWords.size());
+                for (int i = 0; i < lstofWords.size(); i++) {
+                    Word word=lstofWords.get(i);
+                    Log.i("test", word.getWord()+" date "+word.getDate()+" id "+ word.getId());
+                }
             }
         });
+        long selectedDateMs=simpleCalendarView.getDate();
+        Date date=new Date(selectedDateMs);
+        mDate = date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getYear();
+        Log.i("test","Initial selected date= "+mDate);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener( view -> {
             Intent intent = new Intent(MainActivity.this, NewWordActivity.class);
@@ -65,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), date, 1);
+            Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY), mDate, mMaxId+1);
+            Log.i("test", "maxid: "+(mMaxId+1));
             mWordViewModel.insert(word);
+            Log.i("test","insert "+word.getWord()+" date "+word.getDate()+" id "+ word.getId());
         } else {
             Toast.makeText(
                     getApplicationContext(),

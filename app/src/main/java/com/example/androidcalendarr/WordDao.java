@@ -16,9 +16,14 @@ public interface WordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Word word);
 
+    @Query("SELECT MAX(id) FROM word_table")
+    LiveData<Integer> getMaxId();
+
     @Query("DELETE FROM word_table")
     void deleteAll();
 
     @Query("SELECT * FROM word_table ORDER BY word ASC")
     LiveData<List<Word>> getAlphabetizedWords();
+
+
 }

@@ -33,11 +33,6 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                 // If you want to start with more words, just add them.
                 WordDao dao = INSTANCE.wordDao();
                 dao.deleteAll();
-
-                Word word = new Word("Hellox", "1/1/2023", 1);
-                dao.insert(word);
-                word = new Word("World", "1/1/2023", 1);
-                dao.insert(word);
             });
         }
     };

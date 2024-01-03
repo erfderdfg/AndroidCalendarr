@@ -21,5 +21,9 @@ public class WordViewModel extends AndroidViewModel {
 
     LiveData<List<Word>> getAllWords() { return mAllWords; }
 
+    LiveData<Integer> getMaxId() {
+        return mRepository.getMaxId();
+    }
+
     public void insert(Word word) { mRepository.insert(word); }
 }

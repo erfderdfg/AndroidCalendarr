@@ -16,12 +16,12 @@ public class Word {
     @ColumnInfo(name = "word")
     private String mWord;
 
-    public Word(@NonNull String word, String date, int id)
-    {this.mWord = word;
+    public Word(@NonNull String word, String date, int id) {
+        this.id = id;
         this.date = date;
-        this.id = id;}
-
-    public String getWord(){return this.mWord;}
-    public String getDate(){return this.date;}
+        this.mWord = word;
+    }
     public int getId(){return this.id;}
+    public String getDate(){return this.date;}
+    public String getWord(){return this.mWord;}
 }
