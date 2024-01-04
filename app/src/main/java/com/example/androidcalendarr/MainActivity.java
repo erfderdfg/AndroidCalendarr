@@ -23,6 +23,7 @@ import android.widget.Button;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +60,10 @@ private Integer mMaxId;
                 Log.i("test","size "+lstofWords.size());
                 for (int i = 0; i < lstofWords.size(); i++) {
                     Word word=lstofWords.get(i);
-                    Log.i("test", word.getWord()+" date "+word.getDate()+" id "+ word.getId());
+                    if(Objects.equals(word.getDate(), mDate)){
+                        Log.i("test", word.getWord()+" date "+word.getDate()+" id "+ word.getId());
+                    }
+
                 }
             }
         });
