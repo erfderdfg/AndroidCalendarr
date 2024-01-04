@@ -26,4 +26,6 @@ public class WordViewModel extends AndroidViewModel {
     }
 
     public void insert(Word word) { mRepository.insert(word); }
+
+    LiveData<List<Word>> getCertainTasks(String date) { return mRepository.getTasks(date); }
 }

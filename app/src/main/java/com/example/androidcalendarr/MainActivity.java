@@ -34,13 +34,22 @@ public class MainActivity extends AppCompatActivity {
 private Integer mMaxId;
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 
+    private void obseveSelectedTasks(String date){
+        mWordViewModel.getCertainTasks(mDate).observe(this, words -> {
+            // Update the cached copy of the words in the adapter.
+            Log.i("test","total size "+words.size());
+            for (int i = 0; i < words.size(); i++) {
+                Word word=words.get(i);
+                Log.i("test", word.getWord()+" date "+word.getDate()+" id "+ word.getId());
+
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mWordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
-        mWordViewModel.getAllWords().observe(this, words -> {
-            // Update the cached copy of the words in the adapter.
-            Log.i("test","total size "+words.size());
-        });
+        obseveSelectedTasks(mDate);
         mWordViewModel.getMaxId().observe(this, maxId -> {
             mMaxId = maxId;
             Log.i("test","Max id changed to "+maxId);
@@ -58,13 +67,9 @@ private Integer mMaxId;
                 LiveData<List<Word>> allWords = mWordViewModel.getAllWords();
                 List<Word> lstofWords = allWords.getValue();
                 Log.i("test","size "+lstofWords.size());
-                for (int i = 0; i < lstofWords.size(); i++) {
-                    Word word=lstofWords.get(i);
-                    if(Objects.equals(word.getDate(), mDate)){
-                        Log.i("test", word.getWord()+" date "+word.getDate()+" id "+ word.getId());
-                    }
-
-                }
+                Intent intent = new Intent(MainActivity.this, DisplayTasks.class);
+                intent.putExtra("extrareply", mDate);
+                startActivityForResult(intent, 10);
             }
         });
         long selectedDateMs=simpleCalendarView.getDate();
