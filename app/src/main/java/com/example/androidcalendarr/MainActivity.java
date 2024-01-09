@@ -31,22 +31,27 @@ public class MainActivity extends AppCompatActivity {
     CalendarView simpleCalendarView;
     private WordViewModel mWordViewModel;
     private String mDate;
-private Integer mMaxId;
+    private Integer mMaxId;
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mWordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final WordListAdapter adapter = new WordListAdapter(new WordListAdapter.WordDiff());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mWordViewModel.getAllWords().observe(this, words -> {
             // Update the cached copy of the words in the adapter.
+            adapter.submitList(words);
             Log.i("test","total size "+words.size());
         });
         mWordViewModel.getMaxId().observe(this, maxId -> {
             mMaxId = maxId;
             Log.i("test","Max id changed to "+maxId);
         });
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         simpleCalendarView = (CalendarView) findViewById(R.id.simpleCalendarView); // get the reference of CalendarView
         // perform setOnDateChangeListener event on CalendarView
         simpleCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
