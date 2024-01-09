@@ -40,9 +40,4 @@ private LiveData<Integer> mMaxId;
     LiveData<Integer> getMaxId() {
         return mMaxId;
     }
-
-
-    LiveData<List<Word>> getTasks(String date) {
-        return mWordDao.getDateWords(date);
-    }
 }
