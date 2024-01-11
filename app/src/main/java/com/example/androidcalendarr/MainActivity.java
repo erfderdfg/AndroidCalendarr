@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         final WordListAdapter adapter = new WordListAdapter(new WordListAdapter.WordDiff());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mWordViewModel.getAllWords().observe(this, words -> {
+        mWordViewModel.getCertainTasks(mDate).observe(this, words -> {
             // Update the cached copy of the words in the adapter.
             adapter.submitList(words);
             Log.i("test","total size "+words.size());
